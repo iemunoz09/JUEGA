@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+
+		<title>¡JUEGA!</title>
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="playerApp.css">
+
+		<!-- DataTables CSS -->
+		<link rel="stylesheet" type="text/css" href="datatables.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+
+		
+	</head>
+	<body>
+		<h1>¡JUEGA!</h1>
+		<h2>GameTime<br></h2>
+
+		
+		<div class="form-label-group">
+			<label for="numOfPlayers">Players on field?</label>
+			<select class="form-control form-sm" id="numOfPlayers" name="numOfPlayers" required>
+				<option value="" selected disabled>Select Number</option>
+				<option value=11>11</option>
+				<option value=10>10</option>
+				<option value=9>9</option>
+			</select>
+			<br>
+			<br>
+		</div>
+		
+		<div id="field" class="field col-xs-12"> 		
+			<div class="grid-container">
+			  <div id="fieldPlayer1" class="fieldPlayer rounded-circle">#</div>
+			  <div id="fieldPlayer2" class="fieldPlayer rounded-circle">#</div>  
+			  <div id="fieldPlayer3" class="fieldPlayer rounded-circle">#</div>
+			  <div id="fieldPlayer4" class="fieldPlayer rounded-circle">#</div>
+			  <div id="fieldPlayer5" class="fieldPlayer rounded-circle">#</div>
+			  <div id="fieldPlayer6" class="fieldPlayer rounded-circle">#</div>
+			  <div id="fieldPlayer7" class="fieldPlayer rounded-circle">#</div>  
+			  <div id="fieldPlayer8" class="fieldPlayer rounded-circle">#</div>
+			  <div id="fieldPlayer9" class="fieldPlayer rounded-circle">#</div>
+			  <div id="fieldPlayer10" class="fieldPlayer rounded-circle">#</div>
+			  <div id="goalie" class="fieldPlayer goalie rounded-circle">#</div>
+			</div>
+		</div>
+		
+		<div id="availablePlayersBox" class="availablePlayers align-content-center" >
+			<span class="helper"></span>
+			<div id="availablePlayersInnerBox" data-idposition=" " class="onFieldLoadPlayers" label="Available Players" >	
+			<p>Available Players</p>
+				<table id="loadOnFieldPlayers" class="selectable nowrap" >
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Nickname</th>
+							<th>Primary<br>Position</th>
+							<th>Secondary<br>Position</th>
+							<th>Comments</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+					<tfoot>
+					</tfoot>
+				</table>								
+			</div>
+		</div>
+
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+	
+	<!-- DataTables -->
+	<script type="text/javascript" charset="utf8" src="jquery.dataTables.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+	<script src="illusion.js"></script>
+
+	</body>
+
+
+</html>
