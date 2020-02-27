@@ -18,10 +18,10 @@ function dragMoveListener (event) {
 
 // create a restrict modifier to prevent dragging an element out of its parent
 const restrictToParent = [
-							interact.modifiers.restrictRect({
-								restriction: 'parent'
-							})
-						];
+				interact.modifiers.restrictRect({
+					restriction: 'parent'
+				})
+			];
 
 var playerOnField = interact('.fieldPlayer');
 
@@ -46,6 +46,9 @@ playerOnField.on('doubletap', function (event) {
 		dataAttributeParent.setAttribute('data-idposition','["'+elementID+'","'+leftPos+'","'+topPos+'"]');
 
 		$("#availablePlayersBox").show();
+	
+	//release mouse event to avoid automatically selecting an option.
+		elem.stopImmediatePropagation();
 });
 
 //If clicking inside availablePlayersBox but outside availablePlayersInnerBox, then close availablePlayersBox
