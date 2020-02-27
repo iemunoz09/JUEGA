@@ -48,7 +48,7 @@ playerOnField.on('doubletap', function (event) {
 		$("#availablePlayersBox").show();
 	
 	//release mouse event to avoid automatically selecting an option.
-		elem.stopImmediatePropagation();
+		event.stopImmediatePropagation();
 });
 
 //If clicking inside availablePlayersBox but outside availablePlayersInnerBox, then close availablePlayersBox
