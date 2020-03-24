@@ -18,10 +18,10 @@ function dragMoveListener (event) {
 
 // create a restrict modifier to prevent dragging an element out of its parent
 const restrictToParent = [
-				interact.modifiers.restrictRect({
-					restriction: 'parent'
-				})
-			];
+							interact.modifiers.restrictRect({
+								restriction: 'parent'
+							})
+						];
 
 var playerOnField = interact('.fieldPlayer');
 
@@ -30,6 +30,8 @@ playerOnField.draggable({
 			onmove: dragMoveListener,
 			modifiers: restrictToParent
 	});
+
+
 
 //Double click on field player
 //On double click for class = fieldPlayer display availablePlayersBox in a modal/pop up window
@@ -43,16 +45,21 @@ playerOnField.on('doubletap', function (event) {
 	
 		//Save values to data attribute
 		dataAttributeParent = document.getElementById("availablePlayersInnerBox");
-		dataAttributeParent.setAttribute('data-idposition','["'+elementID+'","'+leftPos+'","'+topPos+'"]');
+		dataAttributeParent.setAttribute('data-idposition','["'+elementID+'","'+leftPos+'","'+topPos+'"]'); 
 
 		$("#availablePlayersBox").show();
-	
-	//release mouse event to avoid automatically selecting an option.
-		event.stopImmediatePropagation();
+		
+		//For some reason the code continues from here and proceeds to availablePlayersTable.on(Select...)
+		//The doubletap needs to end here or clear its event value
+		
+//Do I include a condition as to when the next function is valid?
+
+
+		
 });
 
 //If clicking inside availablePlayersBox but outside availablePlayersInnerBox, then close availablePlayersBox
-$("#availablePlayersBox").mouseup(function(e) 			//user clicks outside of innerbox
+$("#availablePlayersBox").on('click', function(e) 			//user clicks outside of innerbox
 	{
 		var container = $("#availablePlayersInnerBox");
 
@@ -127,7 +134,6 @@ $( function loadPosition(){
 	  }};	
 
 
-
 //Available Players Table
 //load the pop-up availablePlayersBox as a DataTable and declare as variablel to use again
 var availablePlayersTable = $('#loadOnFieldPlayers').DataTable( 
@@ -168,22 +174,18 @@ var availablePlayersTable = $('#loadOnFieldPlayers').DataTable(
 								}
 							}
 						] */
-    });
-
-
-	
-availablePlayersTable.on( 'select', function ( e, dt, type, indexes ) {
+    }).on( 'select', function ( eve, dt, type, indexes ) {
 				
 	var selectedRow = availablePlayersTable.row( {selected:true} ),
 		selectedRowData = selectedRow.data(),			
-		playerID = parseInt(selectedRowData[5]),
-		jerseyNumber = parseInt(selectedRowData[0]),
+			playerID = parseInt(selectedRowData[5]),
+			jerseyNumber = parseInt(selectedRowData[0]),
 		elementArrayInHTML = dataAttributeParent.getAttribute('data-idposition'),
 		elementArrayInJSON = JSON.parse(elementArrayInHTML),
-		//convert html to array 
-		elementID = elementArrayInJSON[0],
-		leftPos = elementArrayInJSON[1],
-		topPos = elementArrayInJSON[2];		
+			//convert html to array 
+			elementID = elementArrayInJSON[0],
+			leftPos = elementArrayInJSON[1],
+			topPos = elementArrayInJSON[2];		
 
 			$.ajax({
 				type: 'POST',
@@ -197,20 +199,12 @@ availablePlayersTable.on( 'select', function ( e, dt, type, indexes ) {
 						document.getElementById(elementID).innerHTML = jerseyNumber;
 				
 						selectedRow.deselect();
-						dataAttributeParent.setAttribute('data-idposition','')
+						dataAttributeParent.setAttribute('data-idposition','');
 						$("#availablePlayersBox").hide();
 					
 				});		
 	
 });	
-
-
-
-
-
-
-
-
 
 /*  Notes
 
