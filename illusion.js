@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-//Declares fieldPlayer class as dragabble elements
+	//Declares fieldPlayer class as dragabble elements
 
 function dragMoveListener (event) {
   var target = event.target,
@@ -16,7 +16,7 @@ function dragMoveListener (event) {
   target.setAttribute('data-y', y);
 };
 
-// create a restrict modifier to prevent dragging an element out of its parent
+	// create a restrict modifier to prevent dragging an element out of its parent
 const restrictToParent = [
 							interact.modifiers.restrictRect({
 								restriction: 'parent'
@@ -25,17 +25,17 @@ const restrictToParent = [
 
 var playerOnField = interact('.fieldPlayer');
 
-//drag fieldPlayer class
+	//drag fieldPlayer class
 playerOnField.draggable({
 			onmove: dragMoveListener,
 			modifiers: restrictToParent
 	});
 
+	/*Double click on field player
+	//On double click for class = fieldPlayer display availablePlayersBox in a modal/pop up window*/
+playerOnField.on('doubletap',doubleTapAction);
 
-
-//Double click on field player
-//On double click for class = fieldPlayer display availablePlayersBox in a modal/pop up window
-playerOnField.on('doubletap', function (event) {
+function doubleTapAction(event) {
 	
 	var	elem = 	jQuery(event.target),
 		elementID = $(elem).attr('id'),
@@ -46,38 +46,19 @@ playerOnField.on('doubletap', function (event) {
 		//Save values to data attribute
 		dataAttributeParent = document.getElementById("availablePlayersInnerBox");
 		dataAttributeParent.setAttribute('data-idposition','["'+elementID+'","'+leftPos+'","'+topPos+'"]'); 
-
-		$("#availablePlayersBox").show();
 		
-		//For some reason the code continues from here and proceeds to availablePlayersTable.on(Select...)
-		//The doubletap needs to end here or clear its event value
+		//Display Available Players box and associated functionality
 		
-//Do I include a condition as to when the next function is valid?
-
-
-		
-});
-
-//If clicking inside availablePlayersBox but outside availablePlayersInnerBox, then close availablePlayersBox
-$("#availablePlayersBox").on('click', function(e) 			//user clicks outside of innerbox
-	{
-		var container = $("#availablePlayersInnerBox");
-
-		// if the target of the click isn't the container nor a descendant of the container
-		if (!container.is(e.target) && container.has(e.target).length === 0) 
-		{
-			$("#availablePlayersBox").hide();
-		}
-	});
-
+		$("#availablePlayersBox").addClass('showing'); 
+		availablePlayersShowing()//call function to unbind event and run show()
+};
 	
-// Load Position on Field
-// This code will occur with initial load.
-// 1. have this element load values from table and select the one with the highest recordID
-// 2. identify element htmlId
-// 3. look in array for same element 
-// 4. assign top and left position to element
-
+	/* Load Position on Field
+	// This code will occur with initial load.
+	// 1. have this element load values from table and select the one with the highest recordID
+	// 2. identify element htmlId
+	// 3. look in array for same element 
+	// 4. assign top and left position to element */
 $( function loadPosition(){
 	
 		$.ajax({
@@ -110,29 +91,6 @@ $( function loadPosition(){
 				};
 			});
 });
-
-});
-
-//functions based on events and not dependant on page load.
-
-//Code to display/hide users on field 
-			
- document.getElementById("numOfPlayers").onchange=function() {
-    var playersOnField = this.value;
-	
-      if ( playersOnField == '10')
-      {
-		document.getElementById("fieldPlayer10").style.visibility = "hidden";
-		document.getElementById("fieldPlayer9").style.visibility = "visible";
-      } else if ( playersOnField == '9')
-      {
-		  document.getElementById("fieldPlayer10").style.visibility = "hidden";
-		  document.getElementById("fieldPlayer9").style.visibility = "hidden";
-      } else  {
-		document.getElementById("fieldPlayer10").style.visibility = "visible";
-		document.getElementById("fieldPlayer9").style.visibility = "visible";
-	  }};	
-
 
 //Available Players Table
 //load the pop-up availablePlayersBox as a DataTable and declare as variablel to use again
@@ -174,37 +132,92 @@ var availablePlayersTable = $('#loadOnFieldPlayers').DataTable(
 								}
 							}
 						] */
-    }).on( 'select', function ( eve, dt, type, indexes ) {
-				
-	var selectedRow = availablePlayersTable.row( {selected:true} ),
-		selectedRowData = selectedRow.data(),			
-			playerID = parseInt(selectedRowData[5]),
-			jerseyNumber = parseInt(selectedRowData[0]),
-		elementArrayInHTML = dataAttributeParent.getAttribute('data-idposition'),
-		elementArrayInJSON = JSON.parse(elementArrayInHTML),
-			//convert html to array 
-			elementID = elementArrayInJSON[0],
-			leftPos = elementArrayInJSON[1],
-			topPos = elementArrayInJSON[2];		
+    });	
 
-			$.ajax({
-				type: 'POST',
-				url: 'save-position.php',
-				data: {'recordIDfromRoster':playerID,'jerseyNumber': jerseyNumber,'htmlID':elementID, 'newleft':leftPos, 'newtop':topPos},
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
-					alert("Save-position.php throwing error");
-				}
-			}).done( function syncFieldPlayers(){									
-
-						document.getElementById(elementID).innerHTML = jerseyNumber;
-				
-						selectedRow.deselect();
-						dataAttributeParent.setAttribute('data-idposition','');
-						$("#availablePlayersBox").hide();
-					
-				});		
 	
-});	
+//Function to unbind event and show box
+function availablePlayersShowing(){
+	
+		playerOnField.off('doubletap'); //call newClickFunctions	(!calling off is disabling the whole call)
+		$("#availablePlayersBox").show({done: newClickFunctions()});//called by addClass 'showing'  	
+		
+		};
+
+	
+		//If clicking inside availablePlayersBox but outside availablePlayersInnerBox, then close availablePlayersBox
+function newClickFunctions() 
+{
+	$("#availablePlayersBox").on('click', function(e) 			//user clicks outside of innerbox
+		{
+			var container = $("#availablePlayersInnerBox");
+
+			// if the target of the click isn't the container nor a descendant of the container
+			if (!container.is(e.target) && container.has(e.target).length === 0) 
+			{
+				$("#availablePlayersBox").removeClass('showing');
+				$("#availablePlayersBox").hide();
+				$("#availablePlayersBox").off('click');
+			};
+		});
+			
+		availablePlayersTable.on( 'select', function ( e, dt, type, indexes ) 
+			{		
+			var selectedRow = availablePlayersTable.row( {selected:true} ),
+				selectedRowData = selectedRow.data(),			
+					playerID = parseInt(selectedRowData[5]),
+					jerseyNumber = parseInt(selectedRowData[0]),
+				elementArrayInHTML = dataAttributeParent.getAttribute('data-idposition'),
+				elementArrayInJSON = JSON.parse(elementArrayInHTML),
+					//convert html to array 
+					elementID = elementArrayInJSON[0],
+					leftPos = elementArrayInJSON[1],
+					topPos = elementArrayInJSON[2];		
+
+					$.ajax({
+						type: 'POST',
+						url: 'save-position.php',
+						data: {'recordIDfromRoster':playerID,'jerseyNumber': jerseyNumber,'htmlID':elementID, 'newleft':leftPos, 'newtop':topPos},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+								alert("Save-position.php throwing error");
+							}
+						}).done( function syncFieldPlayers(){									
+
+									document.getElementById(elementID).innerHTML = jerseyNumber;
+							
+									selectedRow.deselect();
+									dataAttributeParent.setAttribute('data-idposition','');
+									$("#availablePlayersBox").removeClass('showing');
+									$("#availablePlayersBox").hide();
+									availablePlayersTable.off( 'select');
+								
+							});		
+			});	
+		};
+});
+
+
+//functions based on events and not dependant on page load.
+
+//Code to display/hide users on field 
+			
+ document.getElementById("numOfPlayers").onchange=function() {
+    var playersOnField = this.value;
+	
+      if ( playersOnField == '10')
+      {
+		document.getElementById("fieldPlayer10").style.visibility = "hidden";
+		document.getElementById("fieldPlayer9").style.visibility = "visible";
+      } else if ( playersOnField == '9')
+      {
+		  document.getElementById("fieldPlayer10").style.visibility = "hidden";
+		  document.getElementById("fieldPlayer9").style.visibility = "hidden";
+      } else  {
+		document.getElementById("fieldPlayer10").style.visibility = "visible";
+		document.getElementById("fieldPlayer9").style.visibility = "visible";
+	  }};	
+
+
+
 
 /*  Notes
 
