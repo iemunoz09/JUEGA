@@ -1,0 +1,150 @@
+@charset "UTF-8";
+/* CSS Document */
+
+body {
+	background-color: white;
+	text-align: center;
+}
+
+header {
+  margin: auto;
+  max-width: 450px;
+  position: absolute;
+  z-index: 100;
+}
+
+h1 {
+	font-size: 20pt;
+	font-family:  Arial Black;
+	color: red;
+	font-weight: bold;
+	line-height: 50pt;
+}
+
+nav {
+	position: relative;
+	text-align: center;
+	width: 65vw;
+}
+ 
+.navbrand_img {
+	z-index:0;
+}
+.text-responsive {
+  font-size: calc(100% + 1vw + 1vh);
+}
+.nav_sections {
+	font-size: calc(100% + 1vw + 1vh);
+	color: #000;
+	display: inline-block;
+	letter-spacing: 1px;
+	margin: 1vw;
+	position: relative;
+	text-transform: uppercase;
+	transition: all .3s ease;
+	-webkit-transition: all .3s ease;
+	-webkit-text-stroke: 1px white;
+}
+
+.navbar-nav {
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+	border: 2px solid red;
+	background-color: white;
+	width: 250px
+}
+
+
+.containerStyle{
+	margin: 60px auto;
+	
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column; 
+  justify-content: center;
+  width: 100%;
+  min-height: 100%;
+  padding: 20px;
+}
+
+#formContent {
+  max-width: 450px;
+  text-align: center;
+}
+
+#formFooter {
+  border-top: 1px solid #dce8f1;
+  padding: 25px;
+}
+
+/* FORM TYPOGRAPHY*/
+
+input[type=button], input[type=submit], input[type=reset]  {
+  background-color: red;
+  border: none;
+  color: white;
+  padding: 15px 80px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 13px;
+  -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+  box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  margin: 5px 20px 40px 20px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
+  background-color: #39ace7;
+}
+
+input[type=button]:active, input[type=submit]:active, input[type=reset]:active  {
+  -moz-transform: scale(0.95);
+  -webkit-transform: scale(0.95);
+  -o-transform: scale(0.95);
+  -ms-transform: scale(0.95);
+  transform: scale(0.95);
+}
+
+input[type=text] {
+  background-color: #f6f6f6;
+  border: none;
+  color: #0d0d0d;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px;
+  width: 85%;
+  border: 2px solid #f6f6f6;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+input[type=text]:focus {
+  background-color: #fff;
+  border-bottom: 2px solid #5fbae9;
+}
+
+input[type=text]:placeholder {
+  color: #cccccc;
+}
+
+

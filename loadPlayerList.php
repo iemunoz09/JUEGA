@@ -28,7 +28,8 @@ $columns = array(
     array( 'db' => 'uniformSize','dt' => 11 ),
     array( 'db' => 'primaryPosition','dt' => 12 ),
     array( 'db' => 'secondaryPosition','dt' => 13 ),
-    array( 'db' => 'playerComments','dt' => 14 )
+    array( 'db' => 'playerComments','dt' => 14 ),
+	array( 'db' => 'recordId','dt' => 15 )
 );
  
   

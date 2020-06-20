@@ -1,152 +1,153 @@
 $(document).ready(function() {
 
-	//Declares fieldPlayer class as dragabble elements
+		/* Load Position on Field
+		// This code will occur with initial load.
+		// 1. have this element load values from table and select the one with the highest recordID
+		// 2. identify element htmlId
+		// 3. look in array for same element 
+		// 4. assign top and left position to element */
+	$( function loadPosition(){
+		
+			$.ajax({
+				url: "load-position.php",
+				dataType: 'JSON',
+				error: function(xhr, textStatus, error) {
+					console.log(xhr.responseText);
+					console.log(xhr.statusText);
+					console.log(textStatus);
+					console.log(error);
+					}
+				}).done( function syncFieldPlayers(data){
+									
+					var selectElements = document.getElementsByClassName('fieldPlayer');
 
-function dragMoveListener (event) {
-  var target = event.target,
-  // keep the dragged position in the data-x/data-y attributes
-  x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-  y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-  // translate the element
-  target.style.webkitTransform = target.style.transform
-                               = 'translate(' + x + 'px, ' + y + 'px)';
-  // update the posiion attributes
-  target.setAttribute('data-x', x);
-  target.setAttribute('data-y', y);
-};
-
-	// create a restrict modifier to prevent dragging an element out of its parent
-const restrictToParent = [
-							interact.modifiers.restrictRect({
-								restriction: 'parent'
-							})
-						];
-
-var playerOnField = interact('.fieldPlayer');
-
-	//drag fieldPlayer class
-playerOnField.draggable({
-			onmove: dragMoveListener,
-			modifiers: restrictToParent
+					// for each array value grab the ID and position and pull values.	
+					for(var i=0; i<selectElements.length; i++)
+					{	var elementId = selectElements[i].id;
+											
+						var valueIndexInArray = data.findIndex(data => data.htmlID === elementId);
+																		
+						if(elementId == data[valueIndexInArray].htmlID){
+							document.getElementById(elementId).style.left = data[valueIndexInArray].htmlLeft + 'px';
+							document.getElementById(elementId).style.top = data[valueIndexInArray].htmlTop + 'px';
+							document.getElementById(elementId).innerHTML = data[valueIndexInArray].jerseyNumber;
+						} else {
+							//handle empty fieldPlayer assignment
+							document.getElementById(elementId).innerHTML = '#';
+						};
+					};
+				});
 	});
 
-	/*Double click on field player
-	//On double click for class = fieldPlayer display availablePlayersBox in a modal/pop up window*/
-playerOnField.on('doubletap',doubleTapAction);
+		//Declares fieldPlayer class as dragabble elements
 
-function doubleTapAction(event) {
-	
-	var	elem = 	jQuery(event.target),
-		elementID = $(elem).attr('id'),
-		pos = elem.position(),
-		leftPos = pos.left,
-		topPos= pos.top;
-	
-		//Save values to data attribute
-		dataAttributeParent = document.getElementById("availablePlayersInnerBox");
-		dataAttributeParent.setAttribute('data-idposition','["'+elementID+'","'+leftPos+'","'+topPos+'"]'); 
-		
-		//Display Available Players box and associated functionality
-		
-		$("#availablePlayersBox").addClass('showing'); 
-		availablePlayersShowing()//call function to unbind event and run show()
-};
-	
-	/* Load Position on Field
-	// This code will occur with initial load.
-	// 1. have this element load values from table and select the one with the highest recordID
-	// 2. identify element htmlId
-	// 3. look in array for same element 
-	// 4. assign top and left position to element */
-$( function loadPosition(){
-	
-		$.ajax({
-			url: "load-position.php",
-			dataType: 'JSON',
-			error: function(xhr, textStatus, error) {
-				console.log(xhr.responseText);
-				console.log(xhr.statusText);
-				console.log(textStatus);
-				console.log(error);
-				}
-			}).done( function syncFieldPlayers(data){
-								
-				var selectElements = document.getElementsByClassName('fieldPlayer');
+	function dragMoveListener (event) {
+	  var target = event.target,
+	  // keep the dragged position in the data-x/data-y attributes
+	  x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+	  y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-				// for each array value grab the ID and position and pull values.	
-				for(var i=0; i<selectElements.length; i++)
-				{	var elementId = selectElements[i].id;
+	  // translate the element
+	  target.style.webkitTransform = target.style.transform
+								   = 'translate(' + x + 'px, ' + y + 'px)';
+	  // update the posiion attributes
+	  target.setAttribute('data-x', x);
+	  target.setAttribute('data-y', y);
+	};
+
+		// create a restrict modifier to prevent dragging an element out of its parent
+	const restrictToParent = [
+								interact.modifiers.restrictRect({
+									restriction: 'parent'
+								})
+							];
+
+	var playerOnField = interact('.fieldPlayer');
+
+		//drag fieldPlayer class
+	playerOnField.draggable({
+				onmove: dragMoveListener,
+				modifiers: restrictToParent
+		});
+
+		/*Double click on field player
+		//On double click for class = fieldPlayer display availablePlayersBox in a modal/pop up window*/
+	playerOnField.on('doubletap',doubleTapAction);
+
+	function doubleTapAction(event) {
+		
+		var	elem = 	jQuery(event.target),
+			elementID = $(elem).attr('id'),
+			pos = elem.position(),
+			leftPos = pos.left,
+			topPos= pos.top;
+		
+			//Save values to data attribute
+			dataAttributeParent = document.getElementById("availablePlayersInnerBox");
+			dataAttributeParent.setAttribute('data-idposition','["'+elementID+'","'+leftPos+'","'+topPos+'"]'); 
+			
+			//Display Available Players box and associated functionality
+			
+			$("#availablePlayersBox").addClass('showing'); 
+			availablePlayersShowing()//call function to unbind event and run show()
+	};
+		
+
+		//Available Players Table
+	//load the pop-up availablePlayersBox as a DataTable and declare as variablel to use again
+	var availablePlayersTable = $('#loadOnFieldPlayers').DataTable( 
+		{
+			"dom"			: 'frtip',
+			"searching"		: false,
+			"processing"	: true,
+			"ajax"			: "loadPlayerList.php", //display only specific columns to match table html where (new) column onField = no
+			"scrollX"		: true,
+			"scrollY"		: '50vh',
+			"scrollCollapse": true,
+			"pageLength"	: 30,
+			"paging"		: true,
+			"columns"		: [
+								{ "data": [0] },
+								{ "data": [1] },
+								{ "data": [2] },
+								{ "data": [9] },
+								{ "data": [12] },
+								{ "data": [13] },
+								{ "data": [14] }
+							],
+			"select"		:  {
+									"style"	: 'single',
+									"info"	: false
+								}/* ,
+			"buttons"		: [
+								{
+									"extend": 'selected',
+									"text": 'Switch Players',
+									"action": function ( e, dt, button, config ) {
 										
-					var valueIndexInArray = data.findIndex(data => data.htmlID === elementId);
-																	
-					if(elementId == data[valueIndexInArray].htmlID){
-						document.getElementById(elementId).style.left = data[valueIndexInArray].htmlLeft + 'px';
-						document.getElementById(elementId).style.top = data[valueIndexInArray].htmlTop + 'px';
-						document.getElementById(elementId).innerHTML = data[valueIndexInArray].jerseyNumber;
-					} else {
-						//handle empty fieldPlayer assignment
-						document.getElementById(elementId).innerHTML = '#';
-					};
-				};
-			});
-});
-
-//Available Players Table
-//load the pop-up availablePlayersBox as a DataTable and declare as variablel to use again
-var availablePlayersTable = $('#loadOnFieldPlayers').DataTable( 
-	{
-		"dom"			: 'frtip',
-		"searching"		: false,
-        "processing"	: true,
-        "ajax"			: "loadPlayerList.php", //display only specific columns to match table html where (new) column onField = no
-		"scrollX"		: true,
-		"scrollY"		: '50vh',
-        "scrollCollapse": true,
-		"pageLength"	: 30,
-        "paging"		: true,
-		"columns"		: [
-							{ "data": [0] },
-							{ "data": [1] },
-							{ "data": [2] },
-							{ "data": [9] },
-							{ "data": [12] },
-							{ "data": [13] },
-							{ "data": [14] }
-						],
-		"select"		:  {
-								"style"	: 'single',
-								"info"	: false
-							}/* ,
-		"buttons"		: [
-							{
-								"extend": 'selected',
-								"text": 'Switch Players',
-								"action": function ( e, dt, button, config ) {
-									
-									alert( dt.rows( { selected: true } ).indexes().length +' row(s) selected' );
-									
-									//Save values;
-									//Print to console;
-									
+										alert( dt.rows( { selected: true } ).indexes().length +' row(s) selected' );
+										
+										//Save values;
+										//Print to console;
+										
+									}
 								}
-							}
-						] */
-    });	
+							] */
+		});	
 
-	
-//Function to unbind event and show box
-function availablePlayersShowing(){
-	
-		playerOnField.off('doubletap'); //call newClickFunctions	(!calling off is disabling the whole call)
-		$("#availablePlayersBox").show({done: newClickFunctions()});//called by addClass 'showing'  	
 		
-		};
+		//Function to unbind event and show box
+	function availablePlayersShowing(){
+		
+			playerOnField.off('doubletap'); //call newClickFunctions	(!calling off is disabling the whole call)
+			$("#availablePlayersBox").show(50,newClickFunctions());//called by addClass 'showing'  	
+			
+			};
 
-	
-		//If clicking inside availablePlayersBox but outside availablePlayersInnerBox, then close availablePlayersBox
-function newClickFunctions() 
-{
+		
+			//If clicking inside availablePlayersBox but outside availablePlayersInnerBox, then close availablePlayersBox
+	function newClickFunctions() 
+	{
 	$("#availablePlayersBox").on('click', function(e) 			//user clicks outside of innerbox
 		{
 			var container = $("#availablePlayersInnerBox");
@@ -209,8 +210,8 @@ function newClickFunctions()
 		document.getElementById("fieldPlayer9").style.visibility = "visible";
       } else if ( playersOnField == '9')
       {
-		  document.getElementById("fieldPlayer10").style.visibility = "hidden";
-		  document.getElementById("fieldPlayer9").style.visibility = "hidden";
+		document.getElementById("fieldPlayer10").style.visibility = "hidden";
+		document.getElementById("fieldPlayer9").style.visibility = "hidden";
       } else  {
 		document.getElementById("fieldPlayer10").style.visibility = "visible";
 		document.getElementById("fieldPlayer9").style.visibility = "visible";
@@ -218,35 +219,4 @@ function newClickFunctions()
 
 
 
-
-/*  Notes
-
-make availablePlayersBox into a selectable DataTable (load table)
-selecting a player will add a record where htmlID(elementID) = fPReference to positionInfo table with new playerID (recordIdFromRoster) and jerseryNumber from playerInfo table.
-
-load menu where teamID=teamID and playerID in roster not in (MAX_VALUE) date for htmlID in positionInfo database (see load-position.php)
-
-	var contentPanelId = jQuery(this).attr("id");
-
-	alert(contentPanelId);
-	
-when menu option selected, then new record added to positionInfo table and jersey number will display
-
-
-
-			use ajax call to
-			1. Load team players not on field; DataTable?
-			2. Select from that list triggers call to update htmlID inner text to jerseyNumber
-	
-		
-
-        $.ajax({
-            type: 'POST',
-            url: 'save-and-load-position.php',
-            data: {'id':id, 'newleft':pos.left, 'newtop':pos.top},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("Save-position.php throwing error");
-			}
-		})
-		*/
  

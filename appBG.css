@@ -1,0 +1,170 @@
+@charset "UTF-8";
+
+
+body {
+	background-color: white;
+	text-align: center;
+}
+
+header {
+  margin: auto;
+  max-width: 450px;
+  position: absolute;
+  z-index: 100;
+}
+
+h1 {
+	font-size: 20pt;
+	font-family:  Arial Black;
+	color: red;
+	font-weight: bold;
+	line-height: 50pt;
+}
+
+nav {
+	position: relative;
+	text-align: center;
+	width: 65vw;
+}
+
+.collapse.show {
+	border: 2px solid red;
+	background-color: white;
+}
+ 
+.navbrand_img {
+	z-index:0;
+}
+.text-responsive {
+  font-size: calc(100% + 1vw + 1vh);
+}
+.nav_sections {
+	font-size: calc(100% + 1vw + 1vh);
+	color: #000;
+	display: inline-block;
+	letter-spacing: 1px;
+	margin: 0 1vw;
+	position: relative;
+	text-transform: uppercase;
+	transition: all .3s ease;
+	-webkit-transition: all .3s ease;
+	-webkit-text-stroke: 1px white;
+}
+
+.navbar-nav.navbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+}
+
+.containerStyle{
+	margin: 60px auto;
+}
+
+
+
+.form-playerInfo {
+  padding: auto;
+  margin: auto;
+}
+
+.form-sm {
+	width: 50%;
+	display: block;
+    margin : 0 auto;
+}
+
+.form-label-group {
+  margin-bottom: 0.5rem;
+  display: flex;
+}
+
+.form-label-group > input,
+.form-label-group > label {
+  height: 3.125rem;
+  padding: .50rem;
+  white-space: nowrap;
+}
+
+.form-group {
+  margin-bottom: 0.5rem;
+  display: flex;
+}
+
+.form-control{
+	width: 95%;
+}
+
+.stepContainer{
+	
+	text-align:center;
+	margin-top:0.5rem;
+
+}
+
+.loadPlayersDiv  {
+	flex: 1;
+	padding: auto;
+	margin: auto;
+	max-width:450px
+}
+
+th, td { 
+white-space: nowrap;
+}
+
+.newPlayerMenu{
+	background:rgba(0,0,0,.4);
+    cursor:pointer;
+    display:none;
+    height:100%;
+    position:fixed;
+    text-align:center;
+    top:0;
+    width:100%;
+	z-index: 10;
+}
+
+.newPlayerMenu .helper{
+    display:inline-block;
+    height:100%;
+    vertical-align:middle;
+}
+
+.formStyle{
+	background-color: #fff;
+    box-shadow: 10px 10px 60px #555;
+    display: inline-block;
+    height: auto;
+    max-width: 551px;
+    min-height: 100px;
+    vertical-align: middle;
+    width: 95%;
+    position: relative;
+    border-radius: 8px;
+}
+
+.tab {
+  display: none;
+}
+
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+/* Mark the active step: */
+.step.active {
+  opacity: 1;
+}
+
+/* Mark the steps that are finished and valid: */
+.step.finish {
+  background-color: #4CAF50;
+}
